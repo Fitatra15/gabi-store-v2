@@ -93,16 +93,19 @@ export async function seedDatabase() {
 
   console.log('🌱 Initialisation de la base de données...');
 
-  // Create admin
-  const adminHash = await bcrypt.hash('Admin@2026!', 12);
+  // Create admin (credentials from environment variables)
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@gabi-store.com';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'ChangeMe@2026!';
+  const adminHash = await bcrypt.hash(adminPassword, 12);
   const admin = await User.create({
     name: 'Administrateur Gabi-Store',
-    email: 'admin@gabi-store.com',
+    email: adminEmail,
     phone: '+261 32 123 45 67',
     password_hash: adminHash,
     role: 'admin',
     is_verified: true,
   });
+  console.log(`   👤 Admin: ${adminEmail}`);
 
   // Create sample customer
   const customerHash = await bcrypt.hash('client123', 12);
